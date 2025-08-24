@@ -1,7 +1,0 @@
-cc_library(
-    name = "srd_core",
-    srcs = ["greeter.cc"],
-    includes = ["include"],
-    deps = ["//include:srd_headers"],
-    visibility = ["//visibility:public"],
-)

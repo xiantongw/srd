@@ -1,6 +1,5 @@
 cc_library(
     name = "srd_headers",
     hdrs = glob(["srd/**/*.hpp"]),
-
     visibility = ["//visibility:public"],
 )
