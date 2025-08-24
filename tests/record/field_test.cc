@@ -1,4 +1,4 @@
-#include "include/srd/record/field.hpp"
+#include "srd/record/field.hpp"
 #include <gtest/gtest.h>
 
 using srd::record::Field;
