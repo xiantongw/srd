@@ -1,24 +1,15 @@
 #include "srd/record/field.hpp"
+#include "srd/common/io.hpp"
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
 
+using srd::common::reader;
+using srd::common::writer;
+
 namespace srd::record {
-
-// helpers
-static void writer(std::ostream &os, const void *p, size_t n) {
-    os.write(reinterpret_cast<const char *>(p), static_cast<std::streamsize>(n));
-    if (!os)
-        throw std::runtime_error("Field::serialize: write failed");
-}
-
-static void reader(std::istream &is, void *p, size_t n) {
-    is.read(reinterpret_cast<char *>(p), static_cast<std::streamsize>(n));
-    if (!is)
-        throw std::runtime_error("Field::serialize: read failed");
-}
 
 // constructors
 Field::Field(int i) : type(FieldType::INT), data_length(sizeof(int)) {

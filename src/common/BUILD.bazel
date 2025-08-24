@@ -1,0 +1,5 @@
+cc_library(
+    name = "common",
+    deps = ["//include:srd_headers"],
+    visibility = ["//visibility:public"],
+)
