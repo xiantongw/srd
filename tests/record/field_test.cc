@@ -4,7 +4,7 @@
 using srd::record::Field;
 using srd::record::FieldType;
 
-static std::unique_ptr<Field> RoundTripBlob(const Field &f) {
+static std::unique_ptr<Field> RoundTrip(const Field &f) {
     const std::string blob = f.serialize();
     std::istringstream is(std::string(blob.data(), blob.size()), std::ios::binary);
     return Field::deserialize(is);
@@ -15,7 +15,7 @@ TEST(Field, IntRoundTrip) {
     EXPECT_EQ(f.getType(), FieldType::INT);
     EXPECT_EQ(f.asInt(), 42);
 
-    auto g = RoundTripBlob(f);
+    auto g = RoundTrip(f);
     ASSERT_NE(g, nullptr);
     EXPECT_EQ(g->getType(), FieldType::INT);
     EXPECT_EQ(g->asInt(), 42);
@@ -26,7 +26,7 @@ TEST(Field, FloatRoundTrip) {
     EXPECT_EQ(f.getType(), FieldType::FLOAT);
     EXPECT_EQ(f.asFloat(), 4.2f);
 
-    auto g = RoundTripBlob(f);
+    auto g = RoundTrip(f);
     ASSERT_NE(g, nullptr);
     EXPECT_EQ(g->getType(), FieldType::FLOAT);
     EXPECT_EQ(g->asFloat(), 4.2f);
@@ -45,7 +45,7 @@ TEST(Field, StringRoundTrip) {
     std::memcpy(&len, blob.data() + sizeof(uint8_t), sizeof(uint32_t));
     EXPECT_EQ(len, 1 + s.size());
 
-    auto g = RoundTripBlob(f);
+    auto g = RoundTrip(f);
     ASSERT_NE(g, nullptr);
     EXPECT_EQ(g->getType(), FieldType::STRING);
     EXPECT_EQ(g->asString(), s);

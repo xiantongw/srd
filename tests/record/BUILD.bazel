@@ -8,3 +8,14 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "tuple_test",
+    srcs = ["tuple_test.cc"],
+    deps = [
+        "//include:srd_headers",
+        "//src/record:record",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
