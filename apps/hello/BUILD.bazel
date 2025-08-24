@@ -1,6 +1,5 @@
 cc_binary(
     name = "hello",
     srcs = ["main.cc"],
-
-    deps = ["//src/common:srd_core",],
+    deps = ["//src/common:srd_core"],
 )
