@@ -1,0 +1,9 @@
+cc_test(
+    name = "field_test",
+    srcs = ["field_test.cc"],
+    deps = [
+        "//src/record:record",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)

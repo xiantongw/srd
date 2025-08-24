@@ -1,0 +1,7 @@
+cc_library(
+    name = "record",
+    srcs = ["field.cc"],
+    includes = ["include"],
+    deps = ["//include:srd_headers"],
+    visibility = ["//visibility:public"],
+)
