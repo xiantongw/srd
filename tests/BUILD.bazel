@@ -1,0 +1,9 @@
+cc_test(
+    name = "greeter_test",
+    srcs = ["greeter_test.cc"],
+    deps = [
+        "//src/common:srd_core",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
