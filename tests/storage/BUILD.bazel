@@ -1,0 +1,10 @@
+cc_test(
+    name = "slotted_page_test",
+    srcs = ["slotted_page_test.cc"],
+    deps = [
+        "//include:srd_headers",
+        "//src/record:record",
+        "//src/storage:storage",
+        "@googletest//:gtest_main",
+    ],
+)

@@ -1,0 +1,9 @@
+cc_library(
+    name = "storage",
+    srcs = ["slotted_page.cc"],
+    deps = [
+        "//include:srd_headers",
+        "//src/record:record",
+    ],
+    visibility = ["//visibility:public"],
+)
