@@ -31,8 +31,11 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     // Calculate offset for new tuple
     size_t offset = metadata_size();
     for (size_t i = 0; i < MAX_SLOTS; ++i) {
-        if (!slot_array[i].empty && slot_array[i].offset != INVALID_VALUE && slot_array[i].length != INVALID_VALUE) {
-            size_t end = static_cast<size_t>(slot_array[i].offset) + static_cast<size_t>(slot_array[i].length);
+        if (!slot_array[i].empty &&
+            slot_array[i].offset != INVALID_VALUE &&
+            slot_array[i].length != INVALID_VALUE) {
+            size_t end = static_cast<size_t>(slot_array[i].offset) +
+                         static_cast<size_t>(slot_array[i].length);
             if (end > offset)
                 offset = end;
         }
