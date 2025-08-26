@@ -41,10 +41,8 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     if (offset + tuple_size > PAGE_SIZE)
         return false;
 
-    if (offset > std::numeric_limits<uint16_t>::max())
-        return false;
-    if (tuple_size > std::numeric_limits<uint16_t>::max())
-        return false;
+    assert(offset <= std::numeric_limits<uint16_t>::max());
+    assert(tuple_size <= std::numeric_limits<uint16_t>::max());
 
     slot_array[slot_id].empty = false;
     slot_array[slot_id].offset = static_cast<uint16_t>(offset);
