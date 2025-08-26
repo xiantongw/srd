@@ -21,44 +21,34 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
 
     size_t slot_id = 0;
     for (; slot_id < MAX_SLOTS; ++slot_id) {
-        if (slot_array[slot_id].empty and
-            slot_array[slot_id].length >= tuple_size)
+        if (slot_array[slot_id].empty)
             break;
     }
 
     if (slot_id == MAX_SLOTS)
         return false;
 
-    // calculate the offset
-    size_t offset = INVALID_VALUE;
-    slot_array[slot_id].empty = false;
-    if (slot_array[slot_id].offset == INVALID_VALUE) {
-        if (slot_id != 0) {
-            auto prev_slot_offset = slot_array[slot_id - 1].offset;
-            auto prev_slot_length = slot_array[slot_id - 1].length;
-            offset = static_cast<size_t>(prev_slot_offset) +
-                     static_cast<size_t>(prev_slot_length);
-        } else {
-            offset = metadata_size();
+    // Calculate offset for new tuple
+    size_t offset = metadata_size();
+    for (size_t i = 0; i < MAX_SLOTS; ++i) {
+        if (!slot_array[i].empty && slot_array[i].offset != INVALID_VALUE && slot_array[i].length != INVALID_VALUE) {
+            size_t end = static_cast<size_t>(slot_array[i].offset) + static_cast<size_t>(slot_array[i].length);
+            if (end > offset)
+                offset = end;
         }
-        slot_array[slot_id].offset = static_cast<uint16_t>(offset);
-    } else {
-        offset = slot_array[slot_id].offset;
     }
 
-    if (offset + tuple_size >= PAGE_SIZE) {
-        slot_array[slot_id].empty = true;
-        slot_array[slot_id].offset = INVALID_VALUE;
+    if (offset + tuple_size > PAGE_SIZE)
         return false;
-    }
 
-    assert(offset + tuple_size < PAGE_SIZE);
-    assert(offset != INVALID_VALUE);
-    assert(offset >= metadata_size());
+    if (offset > std::numeric_limits<uint16_t>::max())
+        return false;
+    if (tuple_size > std::numeric_limits<uint16_t>::max())
+        return false;
 
-    if (slot_array[slot_id].length == INVALID_VALUE) {
-        slot_array[slot_id].length = static_cast<uint16_t>(tuple_size);
-    }
+    slot_array[slot_id].empty = false;
+    slot_array[slot_id].offset = static_cast<uint16_t>(offset);
+    slot_array[slot_id].length = static_cast<uint16_t>(tuple_size);
 
     std::memcpy(page_data_.get() + offset, serialized.data(), tuple_size);
     return true;
