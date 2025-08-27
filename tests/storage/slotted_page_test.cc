@@ -22,6 +22,7 @@ TEST(SlottedPage, InsertAndGet) {
     EXPECT_EQ(out.fields[0]->asInt(), 7);
     EXPECT_FLOAT_EQ(out.fields[1]->asFloat(), 2.5f);
     EXPECT_EQ(out.fields[2]->asString(), "hi");
+    p.print();
 }
 
 TEST(SlottedPage, DeleteThenReadFails) {

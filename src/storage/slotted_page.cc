@@ -87,6 +87,10 @@ bool SlottedPage::getTuple(size_t index, srd::record::Tuple &out) const {
 
 void SlottedPage::print() const {
     const Slot *slot_array = reinterpret_cast<const Slot *>(page_data_.get());
+    std::cout << std::endl;
+    std::cout << "current tail: " << tail_end_(slot_array) << std::endl;
+    std::cout << "used bytes: " << used_bytes_(slot_array) << std::endl;
+    std::cout << std::endl;
     for (size_t i = 0; i < MAX_SLOTS; ++i) {
         const Slot &s = slot_array[i];
         if (!s.empty) {
@@ -98,9 +102,35 @@ void SlottedPage::print() const {
             std::cout << "Slot " << i << " : [" << s.offset << "] :: ";
             if (loaded)
                 loaded->print();
+            std::cout << std::endl;
         }
     }
-    std::cout << "\n";
+}
+
+size_t SlottedPage::used_bytes_(const Slot *slot_array) const {
+    size_t used = 0;
+    for (size_t i = 0; i < MAX_SLOTS; ++i) {
+        const Slot &s = slot_array[i];
+        if (!s.empty &&
+            s.length != INVALID_VALUE && s.offset != INVALID_VALUE) {
+            used += s.length;
+        }
+    }
+    return used;
+}
+
+size_t SlottedPage::tail_end_(const Slot *slot_array) const {
+    size_t tail = metadata_size();
+    for (size_t i = 0; i < MAX_SLOTS; ++i) {
+        const Slot &s = slot_array[i];
+        if (!s.empty &&
+            s.length != INVALID_VALUE && s.offset != INVALID_VALUE) {
+            size_t end = static_cast<size_t>(s.offset) + s.length;
+            if (end > tail)
+                tail = end;
+        }
+    }
+    return tail;
 }
 
 } // namespace srd::storage
