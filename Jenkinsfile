@@ -32,9 +32,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            junit '**/bazel-testlogs/**/*.xml'
-        }
-    }
 }
