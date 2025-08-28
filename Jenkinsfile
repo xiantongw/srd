@@ -16,6 +16,13 @@ pipeline {
         }
     }
     stages {
+        stage('Pre-build') {
+            steps {
+                script {
+                    setBuildStatus("Build started", "PENDING")
+                }
+            }
+        }
         stage('Install dependencies') {
             steps {
                 sh '''
