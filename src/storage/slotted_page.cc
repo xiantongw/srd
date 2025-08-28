@@ -19,6 +19,8 @@ SlottedPage::SlottedPage() {
 bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     const std::string serialized = tuple->serialize();
     const size_t tuple_size = serialized.size();
+    if (tuple_size > std::numeric_limits<uint16_t>::max())
+        return false;
 
     Slot *slot_array = reinterpret_cast<Slot *>(page_data_.get());
 
