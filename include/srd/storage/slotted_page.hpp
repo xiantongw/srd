@@ -59,6 +59,7 @@ private:
     std::unique_ptr<char[]> page_data_ = std::make_unique<char[]>(PAGE_SIZE);
     size_t used_bytes_(const Slot *slot_array) const;
     size_t tail_end_(const Slot *slot_array) const;
+    void compact();
 };
 
 } // namespace srd::storage

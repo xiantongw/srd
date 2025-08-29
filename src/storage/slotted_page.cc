@@ -23,6 +23,7 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
         return false;
 
     Slot *slot_array = reinterpret_cast<Slot *>(page_data_.get());
+    const size_t meta_size = metadata_size();
 
     size_t slot_id = 0;
     for (; slot_id < MAX_SLOTS; ++slot_id) {
@@ -33,31 +34,36 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     if (slot_id == MAX_SLOTS)
         return false;
 
-    // Calculate offset for new tuple
-    size_t offset = metadata_size();
-    for (size_t i = 0; i < MAX_SLOTS; ++i) {
-        if (!slot_array[i].empty &&
-            slot_array[i].offset != INVALID_VALUE &&
-            slot_array[i].length != INVALID_VALUE) {
-            size_t end = static_cast<size_t>(slot_array[i].offset) +
-                         static_cast<size_t>(slot_array[i].length);
-            if (end > offset)
-                offset = end;
+    auto add_tuple_helper = [&](bool do_compact) -> bool {
+        if (do_compact) {
+            // check again if the record can fit in the total free space
+            const size_t used = used_bytes_(slot_array);
+            const size_t capacity = PAGE_SIZE - meta_size;
+            const size_t free = (capacity > used) ? (capacity - used) : 0;
+            if (tuple_size > free)
+                return false;
+            compact(); // if there is enough free space, call compact()
         }
-    }
 
-    if (offset + tuple_size > PAGE_SIZE)
-        return false;
+        // now the empty space are all at the tail of the page
+        size_t offset = tail_end_(slot_array);
+        if (offset + tuple_size > PAGE_SIZE)
+            return false;
+        if (offset > std::numeric_limits<uint16_t>::max())
+            return false;
 
-    assert(offset <= std::numeric_limits<uint16_t>::max());
-    assert(tuple_size <= std::numeric_limits<uint16_t>::max());
+        slot_array[slot_id].empty = false;
+        slot_array[slot_id].offset = static_cast<uint16_t>(offset);
+        slot_array[slot_id].length = static_cast<uint16_t>(tuple_size);
 
-    slot_array[slot_id].empty = false;
-    slot_array[slot_id].offset = static_cast<uint16_t>(offset);
-    slot_array[slot_id].length = static_cast<uint16_t>(tuple_size);
+        std::memcpy(page_data_.get() + offset, serialized.data(), tuple_size);
+        return true;
+    };
 
-    std::memcpy(page_data_.get() + offset, serialized.data(), tuple_size);
-    return true;
+    if (add_tuple_helper(false))
+        return true;
+
+    return add_tuple_helper(true);
 }
 
 void SlottedPage::deleteTuple(size_t index) {
@@ -69,6 +75,11 @@ void SlottedPage::deleteTuple(size_t index) {
     if (!slot_array[index].empty) {
         slot_array[index].empty = true;
     }
+}
+
+void SlottedPage::compact() {
+    std::cout << "compaction is being called" << std::endl;
+    return;
 }
 
 bool SlottedPage::getTuple(size_t index, srd::record::Tuple &out) const {
