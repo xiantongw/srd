@@ -22,7 +22,12 @@ TEST(SlottedPage, InsertAndGet) {
     EXPECT_EQ(out.fields[0]->asInt(), 7);
     EXPECT_FLOAT_EQ(out.fields[1]->asFloat(), 2.5f);
     EXPECT_EQ(out.fields[2]->asString(), "hi");
-    ASSERT_TRUE(p.addTuple(makeTuple(8, 3.5f, "hello")));
+    ASSERT_TRUE(p.addTuple(makeTuple(8, 3.5f, "world")));
+    ASSERT_TRUE(p.getTuple(1, out));
+    ASSERT_EQ(out.fields.size(), 3u);
+    EXPECT_EQ(out.fields[0]->asInt(), 8);
+    EXPECT_FLOAT_EQ(out.fields[1]->asFloat(), 3.5f);
+    EXPECT_EQ(out.fields[2]->asString(), "world");
 }
 
 TEST(SlottedPage, DeleteThenReadFails) {
