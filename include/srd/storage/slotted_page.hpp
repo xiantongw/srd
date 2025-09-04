@@ -1,4 +1,6 @@
 #pragma once
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
 #include "srd/record/tuple.hpp"
 
 using srd::record::Tuple;
@@ -6,7 +8,7 @@ using srd::record::Tuple;
 namespace srd::storage {
 
 inline constexpr size_t PAGE_SIZE = 4096;
-inline constexpr size_t MAX_SLOTS = 512;
+inline constexpr size_t MAX_SLOTS = 128;
 inline constexpr uint16_t INVALID_VALUE = 0xFFFF;
 
 // Slot metadata stored at the beginning of each page
@@ -45,7 +47,7 @@ public:
     bool addTuple(std::unique_ptr<Tuple> tuple);
 
     // Mark slot as empty; does not reclaim space or shuffle offsets
-    void deleteTuple(size_t index);
+    bool deleteTuple(size_t index);
 
     bool getTuple(size_t index, srd::record::Tuple &out) const;
 
@@ -59,6 +61,9 @@ private:
     std::unique_ptr<char[]> page_data_ = std::make_unique<char[]>(PAGE_SIZE);
     size_t used_bytes_(const Slot *slot_array) const;
     size_t tail_end_(const Slot *slot_array) const;
+    void compact_();
+
+    static std::shared_ptr<spdlog::logger> logger;
 };
 
 } // namespace srd::storage

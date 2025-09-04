@@ -4,6 +4,7 @@ cc_library(
     deps = [
         "//include:srd_headers",
         "//src/record:record",
+        "@spdlog//:spdlog",
     ],
     visibility = ["//visibility:public"],
 )

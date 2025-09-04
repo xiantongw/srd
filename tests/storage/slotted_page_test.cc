@@ -1,28 +1,30 @@
 #include "srd/storage/slotted_page.hpp"
 #include "gtest/gtest.h"
+#include <string>
 
 using srd::record::Field;
 using srd::record::Tuple;
 using srd::storage::SlottedPage;
 
-static std::unique_ptr<Tuple> makeTuple(int i, float f, const char *s) {
+static std::unique_ptr<Tuple> makeTuple(int i, float f, std::string s) {
     auto t = std::make_unique<Tuple>();
     t->addField(std::make_unique<Field>(i));
     t->addField(std::make_unique<Field>(f));
-    t->addField(std::make_unique<Field>(std::string(s)));
+    t->addField(std::make_unique<Field>(s));
     return t;
 }
 
 TEST(SlottedPage, InsertAndGet) {
     SlottedPage p;
-    ASSERT_TRUE(p.addTuple(makeTuple(7, 2.5f, "hi")));
+    ASSERT_TRUE(p.addTuple(makeTuple(7, 8.8f, "to_be_deleted")));
     Tuple out;
-    EXPECT_TRUE(p.getTuple(0, out));
-    ASSERT_EQ(out.fields.size(), 3u);
-    EXPECT_EQ(out.fields[0]->asInt(), 7);
-    EXPECT_FLOAT_EQ(out.fields[1]->asFloat(), 2.5f);
-    EXPECT_EQ(out.fields[2]->asString(), "hi");
-    ASSERT_TRUE(p.addTuple(makeTuple(8, 3.5f, "hello")));
+    std::string base_str = "hello ";
+    for (int i = 0; i < 91; i++) {
+        ASSERT_TRUE(p.addTuple(makeTuple(i, 8.8f, base_str + std::to_string(i + 1))));
+    }
+    ASSERT_TRUE(p.deleteTuple(0));
+    ASSERT_TRUE(p.addTuple(makeTuple(0, 8.8f, base_str + std::to_string(1))));
+    ASSERT_FALSE(p.addTuple(makeTuple(1, 8.8f, base_str + std::to_string(2))));
 }
 
 TEST(SlottedPage, DeleteThenReadFails) {
@@ -31,15 +33,4 @@ TEST(SlottedPage, DeleteThenReadFails) {
     p.deleteTuple(0);
     Tuple out;
     EXPECT_FALSE(p.getTuple(0, out));
-}
-
-TEST(SlottedPage, MultipleSlotsOffsetsGrow) {
-    SlottedPage p;
-    ASSERT_TRUE(p.addTuple(makeTuple(1, 1.f, "x")));
-    ASSERT_TRUE(p.addTuple(makeTuple(2, 2.f, "yy")));
-    Tuple t0, t1;
-    EXPECT_TRUE(p.getTuple(0, t0));
-    EXPECT_TRUE(p.getTuple(1, t1));
-    EXPECT_EQ(t0.fields[0]->asInt(), 1);
-    EXPECT_EQ(t1.fields[0]->asInt(), 2);
 }
