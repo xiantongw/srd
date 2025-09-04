@@ -24,6 +24,7 @@ TEST(SlottedPage, InsertAndGet) {
     }
     ASSERT_TRUE(p.deleteTuple(0));
     ASSERT_TRUE(p.addTuple(makeTuple(0, 8.8f, base_str + std::to_string(1))));
+    ASSERT_FALSE(p.addTuple(makeTuple(1, 8.8f, base_str + std::to_string(2))));
 }
 
 TEST(SlottedPage, DeleteThenReadFails) {

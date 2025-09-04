@@ -26,7 +26,6 @@ SlottedPage::SlottedPage() {
 bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     const std::string serialized = tuple->serialize();
     const size_t tuple_size = serialized.size();
-    // logger->info("tuple size to add: {}", tuple_size);
     if (tuple_size > std::numeric_limits<uint16_t>::max())
         return false;
 
@@ -40,7 +39,7 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
     }
 
     if (slot_id == MAX_SLOTS) {
-        logger->error("reached maximum slot number.");
+        logger->info("reached maximum slot number.");
         return false;
     }
 
@@ -51,7 +50,7 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
             const size_t capacity = PAGE_SIZE - meta_size;
             const size_t free = (capacity > used) ? (capacity - used) : 0;
             if (tuple_size > free) {
-                logger->error("no more free space to compact.");
+                logger->info("no more free space to compact.");
                 return false;
             }
             compact_(); // if there is enough free space, call compact()
@@ -60,13 +59,13 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
         // now the empty space are all at the tail of the page
         size_t offset = tail_end_(slots);
         if (offset + tuple_size > PAGE_SIZE) {
-            logger->error("new tuple added will exceed the PAGE_SIZE limit. \
+            logger->info("new tuple added will exceed the PAGE_SIZE limit. \
                           tail: {}, tuple size: {}",
-                          offset, tuple_size);
+                         offset, tuple_size);
             return false;
         }
         if (offset > std::numeric_limits<uint16_t>::max()) {
-            logger->error("offset exceeded the numeric limit.");
+            logger->info("offset exceeded the numeric limit.");
             return false;
         }
 
@@ -85,7 +84,7 @@ bool SlottedPage::addTuple(std::unique_ptr<Tuple> tuple) {
 }
 
 void SlottedPage::compact_() {
-    logger->info("compact_ is being called");
+    logger->info("compact is called.");
     Slot *slots = reinterpret_cast<Slot *>(page_data_.get());
     constexpr int16_t INVALID = -1;
 
@@ -123,7 +122,8 @@ void SlottedPage::compact_() {
     }
     if (cursor < PAGE_SIZE) {
         std::memset(page_data_.get() + cursor, 0, PAGE_SIZE - cursor);
-        logger->info("{} free bytes at tail.", PAGE_SIZE - cursor);
+        logger->info("compact finished, {} free bytes at tail.",
+                     PAGE_SIZE - cursor);
     }
 }
 
