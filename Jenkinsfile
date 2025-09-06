@@ -36,11 +36,6 @@ pipeline {
                 '''
             }
         }
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
                 sh 'bazelisk build //...'
