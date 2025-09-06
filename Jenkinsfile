@@ -16,16 +16,9 @@ pipeline {
             args '-u root:root'
         }
     }
-
-    options {
-        skipDefaultCheckout(true)
-        timestamps()
-    }
-    
     stages {
-        stage('Checkout') {
+        stage('Pre-build') {
             steps {
-                checkout scm
                 script {
                     setBuildStatus("Build started", "PENDING")
                 }
@@ -41,6 +34,11 @@ pipeline {
                 '''
             }
         }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 sh 'bazelisk build //...'
@@ -54,10 +52,10 @@ pipeline {
     }
     post {
         success {
-             script { setBuildStatus("Build succeeded", "SUCCESS") };
+            setBuildStatus("Build succeeded", "SUCCESS");
         }
         failure {
-             script { setBuildStatus("Build failed", "FAILURE") };
+            setBuildStatus("Build failed", "FAILURE");
         }
     }
 }
