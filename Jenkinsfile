@@ -4,7 +4,8 @@ void setBuildStatus(String message, String state) {
       reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xiantongw/srd"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+      statusResultSource: [ $class: "ConditionalStatusResultSource", 
+        results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
 
@@ -15,9 +16,16 @@ pipeline {
             args '-u root:root'
         }
     }
+
+    options {
+        skipDefaultCheckout(true)
+        timestamps()
+    }
+    
     stages {
-        stage('Pre-build') {
+        stage('Checkout') {
             steps {
+                checkout scm
                 script {
                     setBuildStatus("Build started", "PENDING")
                 }
@@ -33,11 +41,6 @@ pipeline {
                 '''
             }
         }
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
                 sh 'bazelisk build //...'
@@ -51,10 +54,10 @@ pipeline {
     }
     post {
         success {
-            setBuildStatus("Build succeeded", "SUCCESS");
+             script { setBuildStatus("Build succeeded", "SUCCESS") };
         }
         failure {
-            setBuildStatus("Build failed", "FAILURE");
+             script { setBuildStatus("Build failed", "FAILURE") };
         }
     }
 }
