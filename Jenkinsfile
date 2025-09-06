@@ -19,16 +19,8 @@ pipeline {
       args '-u root:root'
     }
   }
+  options { skipDefaultCheckout(true) }
   stages {
-    stage('Pre-build') {
-      steps {
-        script {
-          def sha = sh(returnStdout: true, script: 'git rev-parse HEAD || true').trim()
-          if (!sha) { sha = env.GIT_COMMIT }
-          setBuildStatus("Build started", "PENDING", sha)
-        }
-      }
-    }
     stage('Install dependencies') {
       steps {
         sh '''
@@ -45,6 +37,13 @@ pipeline {
         script {
           env.BUILD_COMMIT_SHA = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
           echo "Checked-out SHA: ${env.BUILD_COMMIT_SHA}"
+        }
+      }
+    }
+    stage('Pre-build') {
+      steps {
+        script {
+          setBuildStatus("Build started", "PENDING", env.BUILD_COMMIT_SHA ?: env.GIT_COMMIT)
         }
       }
     }
