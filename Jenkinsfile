@@ -16,6 +16,11 @@ pipeline {
             args '-u root:root'
         }
     }
+
+    options {
+        skipDefaultCheckout(true)
+        timestamps()
+    }
     
     stages {
         stage('Checkout') {
@@ -49,10 +54,10 @@ pipeline {
     }
     post {
         success {
-            setBuildStatus("Build succeeded", "SUCCESS");
+             script { setBuildStatus("Build succeeded", "SUCCESS") };
         }
         failure {
-            setBuildStatus("Build failed", "FAILURE");
+             script { setBuildStatus("Build failed", "FAILURE") };
         }
     }
 }
