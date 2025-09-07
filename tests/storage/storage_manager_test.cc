@@ -14,5 +14,6 @@ TEST(StorageManagerTest, CREATION) {
     std::string path = temp_path();
     StorageManager sm(path);
     EXPECT_EQ(sm.num_pages(), 1u);
+    EXPECT_LE(sm.num_pages(), 2u);
     std::remove(path.c_str());
 }
