@@ -28,7 +28,6 @@ ehthumbs.db
 Thumbs.db
 
 # IDE/editor configs
-.vscode/
 .idea/
 *.swp
 *~
