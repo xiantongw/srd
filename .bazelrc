@@ -1,2 +1,4 @@
 build --cxxopt=-std=c++20
 build --cxxopt=-Wall --cxxopt=-Wextra --cxxopt=-Wpedantic
+
+common --enable_bzlmod

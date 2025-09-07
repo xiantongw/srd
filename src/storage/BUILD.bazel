@@ -1,5 +1,5 @@
 cc_library(
-    name = "storage",
+    name = "slotted_page",
     srcs = ["slotted_page.cc"],
     deps = [
         "//include:srd_headers",
@@ -7,4 +7,16 @@ cc_library(
         "@spdlog//:spdlog",
     ],
     visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "storage_manager",
+    srcs = ["storage_manager.cc"],  
+    hdrs = [],
+    deps = [
+        "//include:srd_headers",
+        "//src/storage:slotted_page", 
+        "@spdlog//:spdlog",
+    ],
+    visibility = ["//visibility:public"], 
 )
