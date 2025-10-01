@@ -1,13 +1,16 @@
 #include "srd/record/field.hpp"
-#include <cstring>
+
 #include <gtest/gtest.h>
+
+#include <cstring>
 
 using srd::record::Field;
 using srd::record::FieldType;
 
 static std::unique_ptr<Field> RoundTrip(const Field &f) {
     const std::string blob = f.serialize();
-    std::istringstream is(std::string(blob.data(), blob.size()), std::ios::binary);
+    std::istringstream is(std::string(blob.data(), blob.size()),
+                          std::ios::binary);
     return Field::deserialize(is);
 }
 
@@ -54,22 +57,22 @@ TEST(Field, StringRoundTrip) {
 
 TEST(Field, CopyAndMoveSemantics) {
     Field a{123};
-    Field b = a; // copy ctor
+    Field b = a;  // copy ctor
     EXPECT_EQ(b.getType(), FieldType::INT);
     EXPECT_EQ(b.asInt(), 123);
 
     Field c{std::string("zzz")};
-    Field d = std::move(c); // move ctor
+    Field d = std::move(c);  // move ctor
     EXPECT_EQ(d.getType(), FieldType::STRING);
     EXPECT_EQ(d.asString(), "zzz");
 
     Field e{3.5f};
-    d = e; // copy assign
+    d = e;  // copy assign
     EXPECT_EQ(d.getType(), FieldType::FLOAT);
     EXPECT_FLOAT_EQ(d.asFloat(), 3.5f);
 
     Field f{std::string("yyy")};
-    d = std::move(f); // move assign
+    d = std::move(f);  // move assign
     EXPECT_EQ(d.getType(), FieldType::STRING);
     EXPECT_EQ(d.asString(), "yyy");
 }

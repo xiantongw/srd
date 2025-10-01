@@ -1,8 +1,10 @@
 #include "srd/record/tuple.hpp"
-#include "srd/common/io.hpp"
+
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
+
+#include "srd/common/io.hpp"
 
 using srd::common::reader;
 using srd::common::writer;
@@ -16,8 +18,7 @@ void Tuple::addField(std::unique_ptr<Field> f) {
 size_t Tuple::getSize() const {
     size_t total = 0;
     for (const auto &f : fields)
-        if (f)
-            total += f->data_length;
+        if (f) total += f->data_length;
     return total;
 }
 
@@ -60,12 +61,10 @@ std::unique_ptr<Tuple> Tuple::deserialize(std::istream &in) {
 void Tuple::print(std::ostream &os) const {
     bool first = true;
     for (const auto &f : fields) {
-        if (!first)
-            os << ' ';
-        if (f)
-            f->print(os);
+        if (!first) os << ' ';
+        if (f) f->print(os);
         first = false;
     }
 }
 
-} // namespace srd::record
+}  // namespace srd::record

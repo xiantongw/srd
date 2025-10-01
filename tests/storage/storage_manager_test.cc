@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-#include <string>
-
-#include "srd/storage/slotted_page.hpp"
 #include "srd/storage/storage_manager.hpp"
+
+#include <gtest/gtest.h>
+
+#include <string>
 
 using namespace srd::storage;
 

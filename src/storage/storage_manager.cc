@@ -7,8 +7,7 @@ namespace srd::storage {
 StorageManager::StorageManager(std::string path) : path_(std::move(path)) {
     open_or_create_();
     recompute_pages_();
-    if (num_pages_ == 0)
-        extend_one();
+    if (num_pages_ == 0) extend_one();
     spdlog::info("StorageManager opened '{}', pages={}", path_, num_pages_);
 }
 
@@ -64,8 +63,7 @@ void StorageManager::extend_one() {
 
 void StorageManager::extend_to(std::uint64_t page_id) {
     std::lock_guard<std::mutex> lock(io_mutex_);
-    if (page_id + 1 <= num_pages_)
-        return;
+    if (page_id + 1 <= num_pages_) return;
     const std::uint64_t add = page_id + 1 - num_pages_;
     std::vector<char> zeros(PAGE_SIZE, 0);
     file_.seekp(0, std::ios::end);
@@ -75,4 +73,4 @@ void StorageManager::extend_to(std::uint64_t page_id) {
     file_.flush();
     num_pages_ = static_cast<std::size_t>(add);
 }
-} // namespace srd::storage
+}  // namespace srd::storage

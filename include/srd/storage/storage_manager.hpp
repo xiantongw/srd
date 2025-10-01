@@ -1,22 +1,25 @@
 #pragma once
 
-#include "srd/storage/slotted_page.hpp"
 #include <fstream>
 #include <mutex>
 #include <string>
 #include <vector>
 
+#include "srd/storage/slotted_page.hpp"
+
 namespace srd::storage {
 
 class StorageManager {
-public:
+   public:
     explicit StorageManager(std::string path = "srd.dat");
 
     StorageManager(const StorageManager &) = delete;
     StorageManager &operator=(const StorageManager &) = delete;
 
     // getter function for the num_pages_
-    std::size_t num_pages() const noexcept { return num_pages_; }
+    std::size_t num_pages() const noexcept {
+        return num_pages_;
+    }
 
     // Ensure the file has at least (page_id + 1) pages (0-based page IDs).
     void extend_to(std::uint64_t page_id);
@@ -32,19 +35,21 @@ public:
     void flush(std::uint64_t page_id, const SlottedPage &page);
 
     // Path of the backing file (useful in tests / logging)
-    const std::string &path() const noexcept { return path_; }
+    const std::string &path() const noexcept {
+        return path_;
+    }
 
     ~StorageManager();
 
-private:
+   private:
     void open_or_create_();
     void recompute_pages_();
 
-private:
+   private:
     std::string path_;
     std::fstream file_;
     std::size_t num_pages_ = 0;
     mutable std::mutex io_mutex_;
 };
 
-} // namespace srd::storage
+}  // namespace srd::storage
