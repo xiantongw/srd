@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Bazelisk
+      - name: Setup bazelisk
         uses: bazelbuild/setup-bazelisk@v3
 
       - name: Build
