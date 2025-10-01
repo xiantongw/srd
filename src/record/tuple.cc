@@ -2,7 +2,6 @@
 
 #include <cstring>
 #include <fstream>
-#include <stdexcept>
 
 #include "srd/common/io.hpp"
 

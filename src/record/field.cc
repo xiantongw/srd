@@ -3,7 +3,6 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
-#include <type_traits>
 #include <vector>
 
 #include "srd/common/io.hpp"

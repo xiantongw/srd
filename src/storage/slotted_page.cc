@@ -5,7 +5,6 @@
 #include <cstring>
 #include <limits>
 #include <sstream>
-#include <stdexcept>
 
 namespace srd::storage {
 
