@@ -3,7 +3,6 @@
 #include <fstream>
 #include <mutex>
 #include <string>
-#include <vector>
 
 #include "srd/storage/slotted_page.hpp"
 
