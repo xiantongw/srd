@@ -1,4 +1,5 @@
 #include "srd/record/tuple.hpp"
+
 #include <gtest/gtest.h>
 
 using srd::record::Field;
@@ -6,7 +7,8 @@ using srd::record::Tuple;
 
 static std::unique_ptr<Tuple> RoundTrip(const Tuple &t) {
     const std::string blob = t.serialize();
-    std::istringstream is(std::string(blob.data(), blob.size()), std::ios::binary);
+    std::istringstream is(std::string(blob.data(), blob.size()),
+                          std::ios::binary);
     return Tuple::deserialize(is);
 }
 

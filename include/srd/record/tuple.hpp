@@ -1,11 +1,12 @@
 #pragma once
-#include "srd/record/field.hpp"
 #include <vector>
+
+#include "srd/record/field.hpp"
 
 namespace srd::record {
 
 class Tuple {
-public:
+   public:
     std::vector<std::unique_ptr<Field>> fields;
 
     Tuple() = default;
@@ -30,4 +31,4 @@ public:
 
     void print(std::ostream &os = std::cout) const;
 };
-} // namespace srd::record
+}  // namespace srd::record

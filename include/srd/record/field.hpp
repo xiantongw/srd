@@ -9,12 +9,10 @@
 
 namespace srd::record {
 
-enum class FieldType : uint8_t { INT = 0,
-                                 FLOAT = 1,
-                                 STRING = 2 };
+enum class FieldType : uint8_t { INT = 0, FLOAT = 1, STRING = 2 };
 
 class Field {
-public:
+   public:
     FieldType type;
     std::unique_ptr<char[]> data;
     size_t data_length;
@@ -32,7 +30,9 @@ public:
     Field &operator=(Field &&other) noexcept;
 
     // accessors
-    FieldType getType() const { return type; }
+    FieldType getType() const {
+        return type;
+    }
     int asInt() const;
     float asFloat() const;
     std::string asString() const;
@@ -50,4 +50,4 @@ public:
     void print(std::ostream &os = std::cout) const;
 };
 
-} // namespace srd::record
+}  // namespace srd::record

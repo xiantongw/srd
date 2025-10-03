@@ -37,7 +37,6 @@ Thumbs.db
 
 # clangd / clang-format caches
 .clangd/
-.clang-format
 compile_commands.json
 
 # Python venv (if you use helper scripts)

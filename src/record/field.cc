@@ -1,10 +1,11 @@
 #include "srd/record/field.hpp"
-#include "srd/common/io.hpp"
+
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
-#include <type_traits>
 #include <vector>
+
+#include "srd/common/io.hpp"
 
 using srd::common::reader;
 using srd::common::writer;
@@ -23,13 +24,14 @@ Field::Field(float f) : type(FieldType::FLOAT), data_length(sizeof(float)) {
 }
 
 Field::Field(const std::string &s) : type(FieldType::STRING) {
-    data_length = s.size() + 1; // including the null-terminator
+    data_length = s.size() + 1;  // including the null-terminator
     data = std::make_unique<char[]>(data_length);
     std::memcpy(data.get(), s.c_str(), data_length);
 }
 
 // copy constructor
-Field::Field(const Field &other) : type(other.type), data_length(other.data_length) {
+Field::Field(const Field &other)
+    : type(other.type), data_length(other.data_length) {
     if (data_length > 0) {
         data = std::make_unique<char[]>(data_length);
         std::memcpy(data.get(), other.data.get(), data_length);
@@ -38,8 +40,7 @@ Field::Field(const Field &other) : type(other.type), data_length(other.data_leng
 
 // copy assign constructor
 Field &Field::operator=(const Field &other) {
-    if (this == &other)
-        return *this;
+    if (this == &other) return *this;
     type = other.type;
     data_length = other.data_length;
     if (data_length > 0) {
@@ -62,8 +63,7 @@ Field::Field(Field &&other) noexcept {
 
 // move assign constructor
 Field &Field::operator=(Field &&other) noexcept {
-    if (this == &other)
-        return *this;
+    if (this == &other) return *this;
     type = other.type;
     data = std::move(other.data);
     data_length = other.data_length;
@@ -163,18 +163,18 @@ std::unique_ptr<Field> Field::deserialize(std::istream &in) {
 // print function
 void Field::print(std::ostream &os) const {
     switch (type) {
-    case FieldType::INT:
-        os << asInt();
-        break;
-    case FieldType::FLOAT:
-        os << asFloat();
-        break;
-    case FieldType::STRING:
-        os << asString();
-        break;
-    default:
-        os << "<unknown>";
-        break;
+        case FieldType::INT:
+            os << asInt();
+            break;
+        case FieldType::FLOAT:
+            os << asFloat();
+            break;
+        case FieldType::STRING:
+            os << asString();
+            break;
+        default:
+            os << "<unknown>";
+            break;
     }
 }
-} // namespace srd::record
+}  // namespace srd::record
