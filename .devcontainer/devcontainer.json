@@ -1,0 +1,31 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "devc-srd",
+
+  "image": "ghcr.io/xiantongw/srd-dev:latest",
+
+  "remoteUser": "user",
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
+
+  "mounts": ["source=bazel-cache,target=/home/user/.cache,type=volume"],
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "ms-vscode.cpptools",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "BazelBuild.vscode-bazel",
+        "eamodio.gitlens",
+        "ms-python.python"
+      ]
+    }
+  },
+
+  "postCreateCommand": "bazel --version || true"
+}

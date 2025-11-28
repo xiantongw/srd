@@ -12,23 +12,35 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    container:
+      image: ghcr.io/xiantongw/srd-dev:latest
+      options: --user root
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Setup bazelisk
-        uses: bazelbuild/setup-bazelisk@v3
+      - name: Show environment info
+        run: |
+          echo "Running on:"
+          uname -a
+          echo
+          echo "Bazel location:"
+          which bazel || true
+          echo
+          echo "Bazel version:"
+          bazel version || true
 
       - name: Build
-        run: bazelisk build //...
+        run: bazel build //...
 
       - name: Test
-        run: bazelisk test //tests/... --test_output=all
+        run: bazel test //tests/... --test_output=all
 
-      - name: Set build status
+      - name: Set build status (success)
         if: ${{ success() }}
         run: echo "Build succeeded"
 
-      - name: Set build status
+      - name: Set build status (failure)
         if: ${{ failure() }}
         run: echo "Build failed"
