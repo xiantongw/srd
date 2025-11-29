@@ -1,9 +1,9 @@
-#include "srd/record/tuple.hpp"
+#include "record/tuple.hpp"
 
 #include <cstring>
 #include <fstream>
 
-#include "srd/common/io.hpp"
+#include "common/io.hpp"
 
 using srd::common::reader;
 using srd::common::writer;

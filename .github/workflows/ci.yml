@@ -35,7 +35,7 @@ jobs:
         run: bazel build //...
 
       - name: Test
-        run: bazel test //tests/... --test_output=all
+        run: bazel test //... --test_output=all
 
       - name: Set build status (success)
         if: ${{ success() }}

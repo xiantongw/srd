@@ -1,0 +1,40 @@
+cc_library(
+    name = "storage",
+    hdrs = [
+        "include/storage/slotted_page.hpp",
+        "include/storage/storage_manager.hpp"
+    ],
+    srcs = [
+        "src/slotted_page.cpp",
+        "src/storage_manager.cpp"
+    ],
+    deps = [
+        "//srd/common:common",
+        "//srd/record:record",
+        "@spdlog//:spdlog",
+    ],
+    strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "slotted_page_test",
+    srcs = ["test/slotted_page_test.cpp"],
+    deps = [
+        "//srd/common:common",
+        "//srd/record:record",
+        ":storage",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "storage_manager_test",
+    srcs = ["test/storage_manager_test.cpp"],
+    deps = [
+        "//srd/common:common",
+        "//srd/record:record",
+        ":storage",
+        "@googletest//:gtest_main",
+    ],
+)

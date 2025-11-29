@@ -1,11 +1,11 @@
-#include "srd/record/field.hpp"
+#include "record/field.hpp"
 
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
 #include <vector>
 
-#include "srd/common/io.hpp"
+#include "common/io.hpp"
 
 using srd::common::reader;
 using srd::common::writer;
