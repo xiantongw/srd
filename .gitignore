@@ -34,6 +34,7 @@ Thumbs.db
 .project
 .settings/
 *.iml
+.vscode
 
 # clangd / clang-format caches
 .clangd/

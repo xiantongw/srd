@@ -1,4 +1,4 @@
-#include "srd/storage/slotted_page.hpp"
+#include "storage/slotted_page.hpp"
 
 #include <cassert>
 #include <cstdint>

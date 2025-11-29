@@ -4,7 +4,7 @@
 #include <mutex>
 #include <string>
 
-#include "srd/storage/slotted_page.hpp"
+#include "storage/slotted_page.hpp"
 
 namespace srd::storage {
 

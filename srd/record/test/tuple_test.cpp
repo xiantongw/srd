@@ -1,4 +1,4 @@
-#include "srd/record/tuple.hpp"
+#include "record/tuple.hpp"
 
 #include <gtest/gtest.h>
 

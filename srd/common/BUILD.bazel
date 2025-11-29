@@ -1,0 +1,11 @@
+cc_library(
+    name = "common",
+    hdrs = [
+        "include/common/io.hpp"
+    ],
+    deps = [],
+    strip_include_prefix = "include",
+    visibility = [
+        "//visibility:public"
+    ],
+)

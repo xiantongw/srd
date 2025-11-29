@@ -1,4 +1,4 @@
-#include "srd/storage/storage_manager.hpp"
+#include "storage/storage_manager.hpp"
 
 #include <gtest/gtest.h>
 
@@ -7,7 +7,7 @@
 #include <random>
 #include <string>
 
-#include "srd/storage/slotted_page.hpp"
+#include "storage/slotted_page.hpp"
 
 using srd::storage::PAGE_SIZE;
 using srd::storage::SlottedPage;
