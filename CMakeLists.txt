@@ -39,7 +39,6 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory(common)
 add_subdirectory(record)
 
-# 只有spdlog可用时才构建storage模块
 if(spdlog_FOUND)
     add_subdirectory(storage)
 endif()
