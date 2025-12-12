@@ -26,17 +26,11 @@ RUN apt-get update && \
       libc6-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN ARCH="$(uname -m)" && \
-    echo "ARCH is $ARCH" && \
-    if [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "amd64" ]; then \
-      BAZELISK_URL="https://github.com/bazelbuild/bazelisk/releases/download/v1.27.0/bazelisk-linux-amd64"; \
-    elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
-      BAZELISK_URL="https://github.com/bazelbuild/bazelisk/releases/download/v1.27.0/bazelisk-linux-arm64"; \
-    else \
-      echo "Unsupported architecture: $ARCH"; exit 1; \
-    fi && \
-    curl -L "$BAZELISK_URL" -o /usr/local/bin/bazel && \
-    chmod +x /usr/local/bin/bazel
+# Install spdlog
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      libspdlog-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir \
       pytest \

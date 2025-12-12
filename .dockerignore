@@ -1,0 +1,28 @@
+# Build outputs
+build/
+cmake-build-*/
+bazel-*
+bin/
+lib/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docs
+*.md
+LICENSE
+
+# CI
+.github/
+
+# Test data
+*.db
+*.log
+*.tmp
+data/

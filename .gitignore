@@ -1,4 +1,4 @@
-# Bazel build outputs
+# Build outputs
 bazel-*
 /bazel-*
 /bazel-out
@@ -44,3 +44,23 @@ compile_commands.json
 venv/
 __pycache__/
 *.pyc
+# CMake build outputs
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+CTestTestfile.cmake
+Testing/
+compile_commands.json
+
+# Build artifacts
+bin/
+lib/
+*.o
+*.a
+*.so
+*.exe
