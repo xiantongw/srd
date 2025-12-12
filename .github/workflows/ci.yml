@@ -25,17 +25,20 @@ jobs:
           echo "Running on:"
           uname -a
           echo
-          echo "Bazel location:"
-          which bazel || true
+          echo "CMake version:"
+          cmake --version
           echo
-          echo "Bazel version:"
-          bazel version || true
+          echo "Ninja version:"
+          ninja --version
+
+      - name: Configure
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: bazel build //...
+        run: cmake --build build --parallel
 
       - name: Test
-        run: bazel test //... --test_output=all
+        run: ctest --test-dir build --output-on-failure
 
       - name: Set build status (success)
         if: ${{ success() }}

@@ -9,23 +9,26 @@
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
 
-  "mounts": ["source=bazel-cache,target=/home/user/.cache,type=volume"],
+  "mounts": ["source=cmake-cache,target=/home/user/.cache,type=volume"],
 
   "customizations": {
     "vscode": {
       "settings": {
         "editor.formatOnSave": true,
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "cmake.configureOnOpen": true,
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
       },
       "extensions": [
         "ms-vscode.cpptools",
         "llvm-vs-code-extensions.vscode-clangd",
-        "BazelBuild.vscode-bazel",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
         "eamodio.gitlens",
         "ms-python.python"
       ]
     }
   },
 
-  "postCreateCommand": "bazel --version || true"
+  "postCreateCommand": "cmake --version && ninja --version"
 }
