@@ -24,7 +24,6 @@ else()
     message(WARNING "spdlog not found, storage module will be skipped")
 endif()
 
-# 启用测试（默认开启）
 option(BUILD_TESTING "Build tests" ON)
 
 enable_testing()
